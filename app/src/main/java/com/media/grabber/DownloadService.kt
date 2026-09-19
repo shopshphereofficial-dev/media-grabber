@@ -81,7 +81,7 @@ class DownloadService : Service() {
                     }
                 }
 
-                YoutubeDL.getInstance().execute(request) { progress, _ ->
+                YoutubeDL.getInstance().execute(request) { progress, _, _ ->
                     updateNotification(notifId, "Downloading: $title", progress.toInt(), true)
                 }
 
@@ -145,7 +145,7 @@ class DownloadService : Service() {
         val values = ContentValues().apply {
             put(MediaStore.Downloads.DISPLAY_NAME, file.name)
             put(MediaStore.Downloads.MIME_TYPE, mime)
-            put(MediaStore.Downloads.IS_PENDING, 1)
+            put(MediaStore.Downloads.IS_PENDING, 0)
         }
         val uri: Uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
             ?: throw Exception("could not save to Downloads")
@@ -153,7 +153,7 @@ class DownloadService : Service() {
             file.inputStream().use { it.copyTo(out) }
         }
         values.clear()
-        values.put(MediaStore.Downloads.IS_PENDING, 0)
+        values.put(MediaStore.Downloads.IS_PENDING, 1)
         resolver.update(uri, values, null, null)
         file.delete()
     }
