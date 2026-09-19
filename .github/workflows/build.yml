@@ -36,13 +36,13 @@ jobs:
         run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: Rename APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk Media-Grabber-v1.1.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Media-Grabber-v1.2.apk
 
       - name: Create release with APK
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create v1.1 Media-Grabber-v1.1.apk \
-            --title "Media Grabber v1.1 (share menu + audio/video + fixes)" \
-            --notes "Share-sheet integration, Video/Audio download choice, engine init fix, smaller APK (arm64). Personal use only." \
-            || gh release upload v1.1 Media-Grabber-v1.1.apk --clobber
+          gh release create v1.2 Media-Grabber-v1.2.apk \
+            --title "Media Grabber v1.2 (in-app browser login + background downloads)" \
+            --notes "Built-in browser with account login (cookies auto-used for downloads), background download service with progress notifications, cleaner UI. Personal use only." \
+            || gh release upload v1.2 Media-Grabber-v1.2.apk --clobber

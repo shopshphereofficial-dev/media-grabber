@@ -62,20 +62,33 @@
                 android:id="@+id/btnPaste"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_btn_paste"
                 android:stateListAnimator="@null"
                 android:text="@string/paste"
                 android:textColor="@color/neon_yellow"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnBrowse"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_paste"
+                android:stateListAnimator="@null"
+                android:text="@string/browse"
+                android:textColor="@color/neon_cyan"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnDownload"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
-                android:layout_marginStart="6dp"
+                android:layout_marginStart="5dp"
                 android:layout_weight="2"
                 android:background="@drawable/bg_btn_download"
                 android:shadowColor="#66FFFFFF"
@@ -83,17 +96,9 @@
                 android:stateListAnimator="@null"
                 android:text="@string/download"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:indeterminate="true"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvStatus"
@@ -104,14 +109,5 @@
             android:textColor="@color/neon_lime"
             android:textSize="15sp" />
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:lineSpacingExtra="3dp"
-        android:text="@string/disclaimer"
-        android:textColor="#709FB4D8"
-        android:textSize="12sp" />
 
 </LinearLayout>

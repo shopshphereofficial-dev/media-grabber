@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/btnYt"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_paste"
+            android:stateListAnimator="@null"
+            android:text="YouTube"
+            android:textColor="@color/neon_yellow"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnIg"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_paste"
+            android:stateListAnimator="@null"
+            android:text="Instagram"
+            android:textColor="@color/neon_pink"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnFb"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_paste"
+            android:stateListAnimator="@null"
+            android:text="Facebook"
+            android:textColor="@color/neon_cyan"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/btnGrab"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_btn_download"
+        android:shadowColor="#66FFFFFF"
+        android:shadowRadius="12"
+        android:stateListAnimator="@null"
+        android:text="@string/grab_current"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</LinearLayout>
