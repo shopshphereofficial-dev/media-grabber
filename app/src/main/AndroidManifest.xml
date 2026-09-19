@@ -24,6 +24,14 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ShareDialogActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:noHistory="true"
+            android:theme="@style/ShareDialogTheme">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -33,6 +41,14 @@
 
         <activity
             android:name=".BrowserActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".LibraryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SettingsActivity"
             android:exported="false" />
 
         <service

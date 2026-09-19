@@ -36,13 +36,13 @@ jobs:
         run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: Rename APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk Media-Grabber-v1.3.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Media-Grabber-v1.4.apk
 
       - name: Create release with APK
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create v1.3 Media-Grabber-v1.3.apk \
-            --title "Media Grabber v1.3 (turbo downloads + engine auto-update + quality picker)" \
-            --notes "aria2c 16-connection fast downloads, yt-dlp engine auto-updates daily (fixes YouTube), SnapTube-style quality picker (1080p/720p/480p/360p, MP3 320k/128k), search bar, 8 site shortcuts, parallel downloads. Personal use only." \
-            || gh release upload v1.3 Media-Grabber-v1.3.apk --clobber
+          gh release create v1.4 Media-Grabber-v1.4.apk \
+            --title "Media Grabber v1.4 (share popup + files library + settings)" \
+            --notes "Share now opens a small popup window and returns you to your app after choosing, My Downloads library with open/delete, Settings screen (default quality, engine update, history), bottom navigation. Personal use only." \
+            || gh release upload v1.4 Media-Grabber-v1.4.apk --clobber

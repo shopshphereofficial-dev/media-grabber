@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="⚡ MEDIA GRABBER"
+        android:textColor="@color/neon_cyan"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvDialogUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingTop="6dp"
+        android:paddingBottom="12dp"
+        android:textColor="#9FB4D8"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/btnQ0"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bg_btn_paste"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null"
+        android:text="🎬  Video — Best quality"
+        android:textColor="@color/neon_yellow"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnQ1"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bg_btn_paste"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null"
+        android:text="🎬  Video — 1080p HD"
+        android:textColor="@color/neon_lime"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnQ2"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bg_btn_paste"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null"
+        android:text="🎬  Video — 720p HD"
+        android:textColor="@color/neon_cyan"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnQ3"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bg_btn_paste"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null"
+        android:text="🎬  Video — 480p"
+        android:textColor="@color/neon_pink"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnQ4"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bg_btn_paste"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null"
+        android:text="🎬  Video — 360p (small)"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnQ5"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bg_btn_paste"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null"
+        android:text="🎵  Audio — MP3 320kbps"
+        android:textColor="@color/neon_lime"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnQ6"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/bg_btn_paste"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null"
+        android:text="🎵  Audio — MP3 128kbps"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/bg_btn_paste"
+        android:minWidth="0dp"
+        android:stateListAnimator="@null"
+        android:text="Cancel"
+        android:textColor="#9FB4D8"
+        android:textSize="13sp" />
+
+</LinearLayout>

@@ -51,6 +51,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        findViewById<Button>(R.id.btnNavHome).setOnClickListener { }
+        findViewById<Button>(R.id.btnNavFiles).setOnClickListener {
+            startActivity(Intent(this, LibraryActivity::class.java))
+        }
+        findViewById<Button>(R.id.btnNavSettings).setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
         Thread {
             var tries = 0
             while (!GrabApp.engineReady && tries < 120) {
@@ -65,22 +73,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.start()
-
-        handleSharedText(intent)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleSharedText(intent)
-    }
-
-    private fun handleSharedText(intent: Intent?) {
-        if (intent?.action != Intent.ACTION_SEND) return
-        val text = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return
-        val url = Regex("https?://\\S+").find(text)?.value ?: return
-        etUrl.setText(url)
-        tvStatus.text = "Link received \u2713"
-        GrabHelper.showFormatDialog(this, url)
     }
 
     private fun toast(msg: String) {

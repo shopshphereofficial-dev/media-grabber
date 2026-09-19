@@ -132,7 +132,10 @@ class DownloadService : Service() {
 
                 val file = workDir.listFiles()?.firstOrNull { it.isFile }
                     ?: throw Exception("downloaded file not found")
-                saveToDownloads(file)
+                val mime = mimeFor(file)
+                val size = file.length()
+                val savedUri = saveToDownloads(file, mime)
+                History.add(this@DownloadService, file.name, size, savedUri.toString(), mime)
                 workDir.deleteRecursively()
                 finishWith(notifId, "Done: ${file.name}", true)
             } catch (e: Exception) {
@@ -177,8 +180,8 @@ class DownloadService : Service() {
         nm.notify(notifId, n)
     }
 
-    private fun saveToDownloads(file: File) {
-        val mime = when (file.extension.lowercase()) {
+    private fun mimeFor(file: File): String {
+        return when (file.extension.lowercase()) {
             "mp4", "m4v" -> "video/mp4"
             "webm" -> "video/webm"
             "mkv" -> "video/x-matroska"
@@ -188,6 +191,9 @@ class DownloadService : Service() {
             "png" -> "image/png"
             else -> "application/octet-stream"
         }
+    }
+
+    private fun saveToDownloads(file: File, mime: String): Uri {
         val resolver = contentResolver
         val values = ContentValues().apply {
             put(MediaStore.Downloads.DISPLAY_NAME, file.name)
@@ -202,5 +208,6 @@ class DownloadService : Service() {
         values.clear()
         values.put(MediaStore.Downloads.IS_PENDING, 0)
         resolver.update(uri, values, null, null)
+        return uri
     }
 }

@@ -18,6 +18,13 @@ object GrabHelper {
             Toast.makeText(activity, "Engine is loading - try again in a few seconds", Toast.LENGTH_SHORT).show()
             return
         }
+        val prefs = activity.getSharedPreferences("settings", Context.MODE_PRIVATE)
+        if (!prefs.getBoolean("ask_quality", true)) {
+            askNotificationPermission(activity)
+            DownloadService.start(activity, url, prefs.getInt("default_quality", 0))
+            Toast.makeText(activity, "Download started - see notification", Toast.LENGTH_SHORT).show()
+            return
+        }
         val options = arrayOf(
             "\uD83C\uDFAC  Video \u2014 Best available",
             "\uD83C\uDFAC  Video \u2014 1080p HD",
@@ -38,7 +45,7 @@ object GrabHelper {
             .show()
     }
 
-    private fun askNotificationPermission(activity: Activity) {
+    fun askNotificationPermission(activity: Activity) {
         if (android.os.Build.VERSION.SDK_INT >= 33 &&
             activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
         ) {
