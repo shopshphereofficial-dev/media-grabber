@@ -36,13 +36,13 @@ jobs:
         run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: Rename APK
-        run: cp app/build/outputs/apk/debug/app-debug.apk Media-Grabber-v1.0.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Media-Grabber-v1.1.apk
 
       - name: Create release with APK
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create v1.0 Media-Grabber-v1.0.apk \
-            --title "Media Grabber v1.0" \
-            --notes "Personal media downloader powered by yt-dlp. YouTube, Instagram, Facebook in original quality. For personal use of your own content only." \
-            || gh release upload v1.0 Media-Grabber-v1.0.apk --clobber
+          gh release create v1.1 Media-Grabber-v1.1.apk \
+            --title "Media Grabber v1.1 (share menu + audio/video + fixes)" \
+            --notes "Share-sheet integration, Video/Audio download choice, engine init fix, smaller APK (arm64). Personal use only." \
+            || gh release upload v1.1 Media-Grabber-v1.1.apk --clobber

@@ -2,6 +2,7 @@ package com.media.grabber
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -10,6 +11,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.yausername.ffmpeg.FFmpeg
 import com.yausername.youtubedl_android.YoutubeDL
@@ -51,9 +53,7 @@ class MainActivity : AppCompatActivity() {
             val url = etUrl.text.toString().trim()
             when {
                 url.isEmpty() -> toast("Link paste karo pehle")
-                !engineReady -> toast("Engine load ho raha hai... thoda ruk ke try karo")
-                downloading -> toast("Download already chal raha hai")
-                else -> startDownload(url)
+                else -> showFormatDialog(url)
             }
         }
 
@@ -67,19 +67,64 @@ class MainActivity : AppCompatActivity() {
                 runOnUiThread { tvStatus.text = "Engine error: ${e.message}" }
             }
         }.start()
+
+        handleSharedText(intent)
     }
 
-    private fun startDownload(url: String) {
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleSharedText(intent)
+    }
+
+    // Called when another app (YouTube/Insta/FB) shares a link to us
+    private fun handleSharedText(intent: Intent?) {
+        if (intent?.action != Intent.ACTION_SEND) return
+        val text = intent.getStringExtra(Intent.EXTRA_TEXT) ?: return
+        val url = Regex("https?://\\S+").find(text)?.value ?: return
+        etUrl.setText(url)
+        tvStatus.text = "Link mil gaya \u2713"
+        showFormatDialog(url)
+    }
+
+    private fun showFormatDialog(url: String) {
+        if (!engineReady) {
+            toast("Engine load ho raha hai... 30 second ruk ke try karo")
+            return
+        }
+        if (downloading) {
+            toast("Download already chal raha hai")
+            return
+        }
+        val options = arrayOf(
+            "\uD83C\uDFA5  Video (MP4) - original quality",
+            "\uD83C\uDFB5  Audio (MP3) - sirf sound"
+        )
+        AlertDialog.Builder(this)
+            .setTitle("Kaise download karna hai?")
+            .setItems(options) { _, which ->
+                startDownload(url, asAudio = which == 1)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun startDownload(url: String, asAudio: Boolean) {
         downloading = true
         btnDownload.isEnabled = false
         progress.visibility = ProgressBar.VISIBLE
-        tvStatus.text = "Download shuru..."
+        tvStatus.text = if (asAudio) "Audio download shuru..." else "Video download shuru..."
         Thread {
             try {
                 val dir = File(getExternalFilesDir(null), "downloads").apply { mkdirs() }
                 val request = YoutubeDLRequest(url).apply {
-                    addOption("-f", "bv*+ba/b")
-                    addOption("--merge-output-format", "mp4")
+                    if (asAudio) {
+                        addOption("-f", "ba/b")
+                        addOption("-x")
+                        addOption("--audio-format", "mp3")
+                    } else {
+                        addOption("-f", "bv*+ba/b")
+                        addOption("--merge-output-format", "mp4")
+                    }
                     addOption("-o", dir.absolutePath + "/%(title)s.%(ext)s")
                     addOption("--no-playlist")
                     addOption("--no-mtime")
