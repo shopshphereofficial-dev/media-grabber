@@ -26,6 +26,11 @@ class BrowserActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnYt).setOnClickListener { load("https://www.youtube.com") }
         findViewById<Button>(R.id.btnIg).setOnClickListener { load("https://www.instagram.com") }
         findViewById<Button>(R.id.btnFb).setOnClickListener { load("https://www.facebook.com") }
+        findViewById<Button>(R.id.btnTikTok).setOnClickListener { load("https://www.tiktok.com") }
+        findViewById<Button>(R.id.btnTwitter).setOnClickListener { load("https://x.com") }
+        findViewById<Button>(R.id.btnSoundCloud).setOnClickListener { load("https://soundcloud.com") }
+        findViewById<Button>(R.id.btnDailymotion).setOnClickListener { load("https://www.dailymotion.com") }
+        findViewById<Button>(R.id.btnWhatsapp).setOnClickListener { load("https://web.whatsapp.com") }
 
         findViewById<Button>(R.id.btnGrab).setOnClickListener {
             val url = webView.url
@@ -36,7 +41,7 @@ class BrowserActivity : AppCompatActivity() {
             }
         }
 
-        load(intent.getStringExtra("url") ?: "https://www.instagram.com")
+        load(intent.getStringExtra("url") ?: "https://www.youtube.com")
     }
 
     private fun load(url: String) {

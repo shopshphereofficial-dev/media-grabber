@@ -19,24 +19,33 @@ object GrabHelper {
             return
         }
         val options = arrayOf(
-            "\uD83C\uDFA5  Video (MP4) - original quality",
-            "\uD83C\uDFB5  Audio (MP3) - sound only"
+            "\uD83C\uDFAC  Video \u2014 Best available",
+            "\uD83C\uDFAC  Video \u2014 1080p HD",
+            "\uD83C\uDFAC  Video \u2014 720p HD",
+            "\uD83C\uDFAC  Video \u2014 480p",
+            "\uD83C\uDFAC  Video \u2014 360p (small)",
+            "\uD83C\uDFB5  Audio \u2014 MP3 320kbps",
+            "\uD83C\uDFB5  Audio \u2014 MP3 128kbps (small)"
         )
         AlertDialog.Builder(activity)
-            .setTitle("Download format")
+            .setTitle("Choose quality")
             .setItems(options) { _, which ->
-                if (android.os.Build.VERSION.SDK_INT >= 33 &&
-                    activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    ActivityCompat.requestPermissions(
-                        activity, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1
-                    )
-                }
-                DownloadService.start(activity, url, which == 1)
+                askNotificationPermission(activity)
+                DownloadService.start(activity, url, which)
                 Toast.makeText(activity, "Download started - see notification", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Cancel", null)
             .show()
+    }
+
+    private fun askNotificationPermission(activity: Activity) {
+        if (android.os.Build.VERSION.SDK_INT >= 33 &&
+            activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                activity, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1
+            )
+        }
     }
 
     // Exports WebView cookies (from logins made in the in-app browser) into a

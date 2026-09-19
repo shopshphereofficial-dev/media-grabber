@@ -16,19 +16,22 @@ import androidx.core.content.ContextCompat
 import com.yausername.youtubedl_android.YoutubeDL
 import com.yausername.youtubedl_android.YoutubeDLRequest
 import java.io.File
+import java.util.concurrent.atomic.AtomicInteger
 
 class DownloadService : Service() {
 
     companion object {
         private const val CHANNEL_ID = "downloads"
 
-        fun start(context: Context, url: String, audio: Boolean) {
+        fun start(context: Context, url: String, quality: Int) {
             val intent = Intent(context, DownloadService::class.java)
                 .putExtra("url", url)
-                .putExtra("audio", audio)
+                .putExtra("quality", quality)
             ContextCompat.startForegroundService(context, intent)
         }
     }
+
+    private val active = AtomicInteger(0)
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -42,7 +45,7 @@ class DownloadService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val url = intent?.getStringExtra("url") ?: return START_NOT_STICKY
-        val audio = intent.getBooleanExtra("audio", false)
+        val quality = intent.getIntExtra("quality", 0)
         val notifId = url.hashCode()
 
         val initial = buildNotification("Preparing download...", 0, true)
@@ -52,32 +55,74 @@ class DownloadService : Service() {
             startForeground(notifId, initial)
         }
 
+        active.incrementAndGet()
+
         Thread {
             try {
+                val cookieFile = GrabHelper.writeCookieFile(this@DownloadService, url)
+
                 val title = try {
-                    YoutubeDL.getInstance().getInfo(YoutubeDLRequest(url)).title ?: url
+                    val infoRequest = YoutubeDLRequest(url)
+                    if (cookieFile != null) infoRequest.addOption("--cookies", cookieFile.absolutePath)
+                    YoutubeDL.getInstance().getInfo(infoRequest).title ?: url
                 } catch (e: Exception) {
                     url
                 }
 
-                val dir = File(getExternalFilesDir(null), "downloads").apply { mkdirs() }
+                updateNotification(notifId, "Downloading: $title", 0, true)
+
+                // every download gets its own folder so parallel downloads
+                // never pick up each other's files
+                val workDir = File(
+                    File(getExternalFilesDir(null), "downloads"),
+                    System.currentTimeMillis().toString()
+                )
+                workDir.mkdirs()
+
                 val request = YoutubeDLRequest(url).apply {
-                    if (audio) {
-                        addOption("-f", "ba/b")
-                        addOption("-x")
-                        addOption("--audio-format", "mp3")
-                    } else {
-                        addOption("-f", "bv*+ba/b")
-                        addOption("--merge-output-format", "mp4")
+                    when (quality) {
+                        1 -> {
+                            addOption("-f", "bv*[height<=1080]+ba/b[height<=1080]")
+                            addOption("--merge-output-format", "mp4")
+                        }
+                        2 -> {
+                            addOption("-f", "bv*[height<=720]+ba/b[height<=720]")
+                            addOption("--merge-output-format", "mp4")
+                        }
+                        3 -> {
+                            addOption("-f", "bv*[height<=480]+ba/b[height<=480]")
+                            addOption("--merge-output-format", "mp4")
+                        }
+                        4 -> {
+                            addOption("-f", "bv*[height<=360]+ba/b[height<=360]")
+                            addOption("--merge-output-format", "mp4")
+                        }
+                        5 -> {
+                            addOption("-f", "ba/b")
+                            addOption("-x")
+                            addOption("--audio-format", "mp3")
+                            addOption("--audio-quality", "320K")
+                        }
+                        6 -> {
+                            addOption("-f", "ba/b")
+                            addOption("-x")
+                            addOption("--audio-format", "mp3")
+                            addOption("--audio-quality", "128K")
+                        }
+                        else -> {
+                            addOption("-f", "bv*+ba/b")
+                            addOption("--merge-output-format", "mp4")
+                        }
                     }
-                    addOption("-o", dir.absolutePath + "/%(title)s.%(ext)s")
+                    addOption("-o", workDir.absolutePath + "/%(title)s.%(ext)s")
                     addOption("--no-playlist")
                     addOption("--no-mtime")
                     addOption("--no-warnings")
                     addOption("--no-update")
-                    val cookies = GrabHelper.writeCookieFile(this@DownloadService, url)
-                    if (cookies != null) {
-                        addOption("--cookies", cookies.absolutePath)
+                    // fast download: aria2c engine with 16 parallel connections
+                    addOption("--downloader", "libaria2c.so")
+                    if (cookieFile != null) {
+                        addOption("--cookies", cookieFile.absolutePath)
                     }
                 }
 
@@ -85,13 +130,16 @@ class DownloadService : Service() {
                     updateNotification(notifId, "Downloading: $title", progress.toInt(), true)
                 }
 
-                val file = dir.listFiles()?.maxByOrNull { it.lastModified() }
+                val file = workDir.listFiles()?.firstOrNull { it.isFile }
                     ?: throw Exception("downloaded file not found")
                 saveToDownloads(file)
+                workDir.deleteRecursively()
                 finishWith(notifId, "Done: ${file.name}", true)
             } catch (e: Exception) {
                 val msg = e.message ?: "unknown error"
                 finishWith(notifId, "Failed: $msg", false)
+            } finally {
+                if (active.decrementAndGet() == 0) stopSelf()
             }
         }.start()
 
@@ -127,7 +175,6 @@ class DownloadService : Service() {
             .setAutoCancel(true)
             .build()
         nm.notify(notifId, n)
-        stopSelf()
     }
 
     private fun saveToDownloads(file: File) {
@@ -155,6 +202,5 @@ class DownloadService : Service() {
         values.clear()
         values.put(MediaStore.Downloads.IS_PENDING, 0)
         resolver.update(uri, values, null, null)
-        file.delete()
     }
 }

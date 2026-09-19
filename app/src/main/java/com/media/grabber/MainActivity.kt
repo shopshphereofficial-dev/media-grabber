@@ -35,11 +35,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnDownload).setOnClickListener {
-            val url = etUrl.text.toString().trim()
-            if (url.isEmpty()) {
-                toast("Please paste a link first")
-            } else {
-                GrabHelper.showFormatDialog(this, url)
+            val input = etUrl.text.toString().trim()
+            when {
+                input.isEmpty() -> toast("Paste a link or type what you want to download")
+                input.startsWith("http") -> GrabHelper.showFormatDialog(this, input)
+                else -> {
+                    // not a link - treat it as a search (opens the built-in browser)
+                    val search = Intent(this, BrowserActivity::class.java)
+                        .putExtra(
+                            "url",
+                            "https://www.youtube.com/results?search_query=" + android.net.Uri.encode(input)
+                        )
+                    startActivity(search)
+                }
             }
         }
 

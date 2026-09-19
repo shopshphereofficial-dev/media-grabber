@@ -3,7 +3,7 @@
     <string name="app_name">Media Grabber</string>
     <string name="app_title">⚡ MEDIA GRABBER ⚡</string>
     <string name="app_subtitle">YouTube • Instagram • Facebook — original quality</string>
-    <string name="url_hint">Paste video link here…</string>
+    <string name="url_hint">Paste a video link or type to search…</string>
     <string name="paste">PASTE</string>
     <string name="browse">🌐 BROWSE</string>
     <string name="download">⬇  DOWNLOAD</string>
