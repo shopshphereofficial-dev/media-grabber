@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Media Grabber</string>
+    <string name="app_title">⚡ MEDIA GRABBER ⚡</string>
+    <string name="app_subtitle">YouTube • Instagram • Facebook — original quality, no watermark</string>
+    <string name="url_hint">Video/post ka link yahan paste karo…</string>
+    <string name="paste">PASTE</string>
+    <string name="download">⬇  DOWNLOAD</string>
+    <string name="engine_loading">Engine load ho raha hai…</string>
+    <string name="disclaimer">⚠️ Sirf apne account ka content personal backup ke liye use karo. Doosron ka content download karke dobara share karna copyright violation hai — app ko distribute mat karna.</string>
+</resources>
