@@ -46,3 +46,11 @@ jobs:
             --title "Media Grabber v1.4 (share popup + files library + settings)" \
             --notes "Share now opens a small popup window and returns you to your app after choosing, My Downloads library with open/delete, Settings screen (default quality, engine update, history), bottom navigation. Personal use only." \
             || gh release upload v1.4 Media-Grabber-v1.4.apk --clobber
+
+      - name: Publish standard app.apk release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          APK=$(find app/build/outputs/apk -name '*.apk' | head -1)
+          cp "$APK" app.apk
+          gh release create latest app.apk --title "Latest APK" --notes "Auto-built APK from source. Direct download." --latest 2>/dev/null || gh release upload latest app.apk --clobber
